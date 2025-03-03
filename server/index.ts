@@ -17,6 +17,7 @@ import previewRoutes from './api/preview';
 import deploymentRoutes from './api/deployment';
 import errorHandler from './middlewares/errorHandler';
 import authMiddleware from './middlewares/auth';
+import indexRouter from './routes/index';
 
 // Load environment variables
 dotenv.config();
@@ -82,6 +83,8 @@ app.use('/api/app-builder', authMiddleware, appBuilderRoutes);
 app.use('/api/code-gen', authMiddleware, codeGenRoutes);
 app.use('/api/preview', authMiddleware, previewRoutes);
 app.use('/api/deployment', authMiddleware, deploymentRoutes);
+app.use('/', indexRouter);
+app.use('/api/projects', authMiddleware, projectRoutes);
 
 // Error handler
 app.use(errorHandler);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { 
   Box, 
   Container, 
@@ -30,6 +30,10 @@ import {
   TagLabel,
   useToast
 } from '@/components/ui';
+import { useQuery } from 'react-query';
+import { getProjects } from '@/api';
+import { useAuth } from '@/contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 // AI models available in the platform
 const AI_MODELS = [
@@ -1076,5 +1080,19 @@ const MobifyAIDashboard = () => {
     </Box>
   );
 }
+
+const Dashboard = () => {
+  const { user } = useAuth();
+  const { data: projects, error, isLoading } = useQuery('projects', getProjects);
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading projects</div>;
+
+  return <MobifyAIDashboard />;
+};
 
 export default MobifyAIDashboard;
