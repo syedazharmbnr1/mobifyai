@@ -1,7 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+// Extend the Request interface
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    role?: string;
+    name?: string;
+  };
+}
+
+const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     // Get the token from the Authorization header
     const authHeader = req.headers.authorization;
@@ -13,7 +23,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const token = authHeader.split(' ')[1];
     
     // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default_secret') as any;
     
     // Add user info to the request object
     req.user = decoded;

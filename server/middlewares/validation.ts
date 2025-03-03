@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AnyZodObject, z } from 'zod';
+import { AnyZodObject, ZodError, z } from 'zod';
 
 export const validateRequest = (schema: AnyZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -11,11 +11,23 @@ export const validateRequest = (schema: AnyZodObject) => {
       });
       next();
     } catch (error) {
+      // Type guard to check if error is a ZodError
+      if (error instanceof ZodError) {
+        return res.status(400).json({
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Validation failed',
+            details: error.errors,
+          },
+        });
+      }
+      
+      // Handle other types of errors
       return res.status(400).json({
         error: {
           code: 'VALIDATION_ERROR',
           message: 'Validation failed',
-          details: error.errors,
+          details: 'Unknown validation error',
         },
       });
     }

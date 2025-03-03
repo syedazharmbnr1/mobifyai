@@ -3,12 +3,22 @@ import { PrismaClient } from '@prisma/client';
 import { AppError } from '../utils/error';
 import appBuilderService from '../services/appBuilderService';
 
+// Define an interface extending the base Request
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    email: string;
+    role?: string;
+    name?: string;
+  };
+}
+
 const prisma = new PrismaClient();
 
 // Project controller
 const projectController = {
   // Get all projects
-  getProjects: async (req: Request, res: Response) => {
+  getProjects: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user?.id;
       
@@ -31,7 +41,7 @@ const projectController = {
   },
   
   // Get project by ID
-  getProject: async (req: Request, res: Response) => {
+  getProject: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user?.id;
       const projectId = req.params.id;
@@ -63,7 +73,7 @@ const projectController = {
   },
   
   // Create project
-  createProject: async (req: Request, res: Response) => {
+  createProject: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user?.id;
       
@@ -110,7 +120,7 @@ const projectController = {
   },
   
   // Update project
-  updateProject: async (req: Request, res: Response) => {
+  updateProject: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user?.id;
       const projectId = req.params.id;
@@ -147,7 +157,7 @@ const projectController = {
   },
   
   // Delete project
-  deleteProject: async (req: Request, res: Response) => {
+  deleteProject: async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user?.id;
       const projectId = req.params.id;
