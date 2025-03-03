@@ -806,7 +806,7 @@ const MobifyAIDashboard = () => {
                               <Text color="blue.600"> App </Text>
                               <Text color="purple.600">=</Text>
                               <Text color="red.600"> () </Text>
-                              <Text color="purple.600">=> </Text>
+                              <Text color="purple.600">= </Text>
                               <Text color="black">{`{`}</Text>
                               <br />
                               <Text ml={4} color="black">return (</Text>
