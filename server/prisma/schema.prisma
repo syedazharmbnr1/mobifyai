@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  avatar    String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projects  Project[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Project {
+  id                String   @id @default(uuid())
+  name              String
+  description       String?
+  appType           AppType  @default(REACT_NATIVE)
+  status            ProjectStatus @default(DRAFT)
+  appSpecification  Json?
+  uiDesignSystem    Json?
+  databaseSchema    Json?
+  previewUrl        String?
+  codeRepositoryUrl String?
+  errorMessage      String?
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  templateId        String?
+  template          ProjectTemplate? @relation(fields: [templateId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  preview           Preview?
+}
+
+enum AppType {
+  REACT_NATIVE
+  FLUTTER
+  IOS
+  ANDROID
+}
+
+enum ProjectStatus {
+  DRAFT
+  CREATING
+  GENERATING_SPECS
+  GENERATING_UI
+  GENERATING_DB_SCHEMA
+  GENERATING_CODE
+  GENERATING_PREVIEW
+  READY
+  ERROR
+}
+
+model ProjectTemplate {
+  id                String   @id @default(uuid())
+  name              String
+  description       String?
+  appType           AppType  @default(REACT_NATIVE)
+  category          String?
+  complexity        String?
+  appSpecification  Json?
+  uiDesignSystem    Json?
+  databaseSchema    Json?
+  previewUrl        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  projects          Project[]
+}
+
+model Preview {
+  id           String   @id @default(uuid())
+  projectId    String   @unique
+  project      Project  @relation(fields: [projectId], references: [id])
+  previewUrl   String
+  previewData  Json?
+  createdAt    DateTime @default(now())
+}
