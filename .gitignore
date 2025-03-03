@@ -68,3 +68,4 @@ captures/
 # System files
 .DS_Store
 Thumbs.db
+server/package-lock.json

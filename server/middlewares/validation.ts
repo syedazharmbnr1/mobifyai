@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AnyZodObject } from 'zod';
+import { AnyZodObject, z } from 'zod';
 
 export const validateRequest = (schema: AnyZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -21,3 +21,24 @@ export const validateRequest = (schema: AnyZodObject) => {
     }
   };
 };
+
+// Login validation schema
+const loginSchema = z.object({
+  body: z.object({
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+  }),
+});
+
+// Register validation schema
+const registerSchema = z.object({
+  body: z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+  }),
+});
+
+// Export validation middlewares
+export const validateLogin = validateRequest(loginSchema);
+export const validateRegister = validateRequest(registerSchema);

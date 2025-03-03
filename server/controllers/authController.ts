@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 import { AppError } from '../utils/error';
@@ -30,10 +30,11 @@ const authController = {
       }
       
       // Generate JWT
+      // Generate JWT
       const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
-        process.env.JWT_SECRET || 'default_secret',
-        { expiresIn: process.env.JWT_EXPIRATION || '8h' }
+        { id: user.id, email: user.email, role: user.role } as object,
+        process.env.JWT_SECRET || 'default_secret' as jwt.Secret, 
+        { expiresIn: process.env.JWT_EXPIRATION || '8h' } as jwt.SignOptions
       );
       
       // Return user and token
@@ -82,11 +83,12 @@ const authController = {
       });
       
       // Generate JWT
-      const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
-        process.env.JWT_SECRET || 'default_secret',
-        { expiresIn: process.env.JWT_EXPIRATION || '8h' }
-      );
+      // Generate JWT
+          const token = jwt.sign(
+            { id: user.id, email: user.email, role: user.role } as object,
+            process.env.JWT_SECRET || 'default_secret' as jwt.Secret, 
+            { expiresIn: process.env.JWT_EXPIRATION || '8h' } as jwt.SignOptions
+          );
       
       // Return user and token
       res.status(201).json({
