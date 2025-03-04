@@ -32,18 +32,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     api.get('/auth/me')
+  //       .then(res => setUser(res.data))
+  //       .catch(() => localStorage.removeItem('token'))
+  //       .finally(() => setIsLoading(false));
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      api.get('/auth/me')
-        .then(res => setUser(res.data))
-        .catch(() => localStorage.removeItem('token'))
-        .finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
+    // Auto-set a test user for development
+    setUser({
+      id: "test-user-id",
+      email: "test@example.com",
+      name: "Test User"
+    });
+    setIsLoading(false);
   }, []);
-
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post('/auth/login', { email, password });

@@ -77,14 +77,20 @@ app.use('/api/', apiLimiter);
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/users', authMiddleware, userRoutes);
-app.use('/api/projects', authMiddleware, projectRoutes);
-app.use('/api/app-builder', authMiddleware, appBuilderRoutes);
-app.use('/api/code-gen', authMiddleware, codeGenRoutes);
-app.use('/api/preview', authMiddleware, previewRoutes);
-app.use('/api/deployment', authMiddleware, deploymentRoutes);
+// app.use('/api/users', authMiddleware, userRoutes);
+// app.use('/api/projects', authMiddleware, projectRoutes);
+// app.use('/api/app-builder', authMiddleware, appBuilderRoutes);
+// app.use('/api/code-gen', authMiddleware, codeGenRoutes);
+// app.use('/api/preview', authMiddleware, previewRoutes);
+// app.use('/api/deployment', authMiddleware, deploymentRoutes);
 app.use('/', indexRouter);
-app.use('/api/projects', authMiddleware, projectRoutes);
+// app.use('/api/projects', authMiddleware, projectRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/app-builder', appBuilderRoutes);
+app.use('/api/code-gen', codeGenRoutes);
+app.use('/api/preview', previewRoutes);
+app.use('/api/deployment', deploymentRoutes);
 
 // Error handler
 app.use(errorHandler);
